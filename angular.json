@@ -26,11 +26,16 @@
             "assets": [
               {
                 "glob": "**/*",
+                "input": "node_modules/@sqlite.org/sqlite-wasm/sqlite-wasm/jswasm"
+              },
+              {
+                "glob": "**/*",
                 "input": "public"
               }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": []
+            "scripts": [],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -63,7 +68,12 @@
               "buildTarget": "sqlocal-shell:build:production"
             },
             "development": {
-              "buildTarget": "sqlocal-shell:build:development"
+              "buildTarget": "sqlocal-shell:build:development",
+              "headers": {
+                "Cross-Origin-Embedder-Policy": "require-corp",
+                "Cross-Origin-Opener-Policy": "same-origin"
+              },
+              "prebundle": false
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +94,8 @@
               }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": []
+            "scripts": [],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         }
       }
