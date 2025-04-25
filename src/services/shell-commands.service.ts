@@ -6,6 +6,7 @@ import { SqlQueryComponent } from '../components/sql/sql-query/sql-query.compone
 import { ShellListComponent } from '../components/shell/shell-list/shell-list.component';
 import { ShellDatabaseInfoComponent } from '../components/shell/shell-database-info/shell-database-info.component';
 import { SqlResultComponent } from '../components/sql/sql-result/sql-result.component';
+import { ShellIntroComponent } from '../components/shell/shell-intro/shell-intro.component';
 
 type Entry = InputEntry | OutputEntry;
 type InputEntry = {
@@ -110,6 +111,16 @@ export class ShellCommandsService {
     return this.dbService.databaseName();
   });
 
+  constructor() {
+    this.history.set([
+      {
+        type: 'output',
+        prompt: this.prompt(),
+        message: { component: ShellIntroComponent, inputs: {} },
+      },
+    ]);
+  }
+
   async exec(commandText: string) {
     const command = commandText.trim();
     const isSql = !command.startsWith('.');
@@ -145,7 +156,7 @@ export class ShellCommandsService {
         const commandConfig = this.commands[action];
 
         if (!commandConfig) {
-          throw new Error(`Unknown command: "${action}"`);
+          throw new Error(`Unknown command: ".${action}"`);
         } else {
           const message = await commandConfig.fn(db, arg);
           output = { type: 'output', prompt, message };

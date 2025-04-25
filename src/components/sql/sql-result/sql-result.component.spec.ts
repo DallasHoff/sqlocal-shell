@@ -13,6 +13,7 @@ describe('SqlResultComponent', () => {
 
     fixture = TestBed.createComponent(SqlResultComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('data', []);
     fixture.detectChanges();
   });
 

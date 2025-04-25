@@ -1,0 +1,18 @@
+.shell-intro {
+  color: var(--fg-color);
+
+  h1 {
+    font-size: 1rem;
+  }
+
+  dl {
+    dt {
+      display: inline;
+    }
+
+    dd {
+      display: inline;
+      font-weight: bold;
+    }
+  }
+}

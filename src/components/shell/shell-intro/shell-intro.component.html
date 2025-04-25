@@ -1,0 +1,21 @@
+<div class="shell-intro">
+  <h1>SQLocal Shell</h1>
+  <br />
+  <dl>
+    <div>
+      <dt>sqlocal version:&nbsp;</dt>
+      <dd>{{ sqlocalVersion }}</dd>
+    </div>
+    <div>
+      <dt>sqlite version:&nbsp;</dt>
+      <dd>{{ sqliteVersion }}</dd>
+    </div>
+  </dl>
+  <br />
+  <p>
+    Opened local database: <b>{{ commandService.prompt() }}</b>
+  </p>
+  <p>Enter SQL to execute against this database.</p>
+  <p>Enter <b>.help</b> to view additional commands.</p>
+  <br />
+</div>
