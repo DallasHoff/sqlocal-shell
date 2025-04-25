@@ -9,8 +9,8 @@ import {
   viewChild,
 } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
-import { ShellCommandsService } from '../../services/shell-commands.service';
-import { ShellDatabaseService } from '../../services/shell-database.service';
+import { ShellCommandsService } from '../../services/shell-commands/shell-commands.service';
+import { ShellDatabaseService } from '../../services/shell-database/shell-database.service';
 
 @Component({
   selector: 'shell',

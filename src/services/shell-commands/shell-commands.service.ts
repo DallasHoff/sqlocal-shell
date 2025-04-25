@@ -1,29 +1,13 @@
 import { computed, inject, Injectable, signal, Type } from '@angular/core';
-import { ShellDatabaseService } from './shell-database.service';
+import { ShellDatabaseService } from '../shell-database/shell-database.service';
 import type { SQLocal } from 'sqlocal';
-import { ShellErrorComponent } from '../components/shell/shell-error/shell-error.component';
-import { SqlQueryComponent } from '../components/sql/sql-query/sql-query.component';
-import { ShellListComponent } from '../components/shell/shell-list/shell-list.component';
-import { ShellDatabaseInfoComponent } from '../components/shell/shell-database-info/shell-database-info.component';
-import { SqlResultComponent } from '../components/sql/sql-result/sql-result.component';
-import { ShellIntroComponent } from '../components/shell/shell-intro/shell-intro.component';
-
-type Entry = InputEntry | OutputEntry;
-type InputEntry = {
-  type: 'input';
-  prompt: string;
-  command: string;
-  message?: EntryMessageComponent;
-};
-type OutputEntry = {
-  type: 'output';
-  prompt: string;
-  message: string | EntryMessageComponent;
-};
-type EntryMessageComponent = {
-  component: Type<unknown>;
-  inputs: Record<string, unknown>;
-};
+import { ShellErrorComponent } from '../../components/shell/shell-error/shell-error.component';
+import { SqlQueryComponent } from '../../components/sql/sql-query/sql-query.component';
+import { ShellListComponent } from '../../components/shell/shell-list/shell-list.component';
+import { ShellDatabaseInfoComponent } from '../../components/shell/shell-database-info/shell-database-info.component';
+import { SqlResultComponent } from '../../components/sql/sql-result/sql-result.component';
+import { ShellIntroComponent } from '../../components/shell/shell-intro/shell-intro.component';
+import { Entry, InputEntry, OutputEntry } from './shell-commands.type';
 
 @Injectable({
   providedIn: 'root',

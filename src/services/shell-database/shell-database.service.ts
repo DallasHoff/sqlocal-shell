@@ -21,7 +21,7 @@ export class ShellDatabaseService {
 
     return new SQLocal({
       databasePath,
-      processor: new Worker(new URL('../sqlocal.worker', import.meta.url)),
+      processor: new Worker(new URL('../../sqlocal.worker', import.meta.url)),
     });
   }
 

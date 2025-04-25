@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ShellCommandsService } from '../../../services/shell-commands.service';
+import { ShellCommandsService } from '../../../services/shell-commands/shell-commands.service';
 import packageLockJson from '../../../../package-lock.json';
 
 @Component({
