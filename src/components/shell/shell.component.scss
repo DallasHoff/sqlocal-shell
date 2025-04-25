@@ -25,6 +25,22 @@
   }
 
   &__entry {
+    border-right: 1px solid transparent;
+    caret-color: currentColor;
     outline: none;
+
+    &:not(:focus) {
+      animation: caret-blink 1s steps(1) infinite;
+    }
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  100% {
+    border-right-color: currentColor;
+  }
+  50% {
+    border-right-color: transparent;
   }
 }

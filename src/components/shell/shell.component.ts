@@ -59,6 +59,8 @@ export class ShellComponent {
     if (!this.isEntryFocused()) {
       if (key === 'Backspace') {
         this.entryText.update((entryText) => entryText.slice(0, -1));
+      } else if (key === 'ArrowLeft' || key === 'ArrowRight') {
+        this.focusEntry();
       } else if (
         key.length === 1 &&
         !this.isModifierKey(key) &&
@@ -92,15 +94,7 @@ export class ShellComponent {
       }
 
       this.syncEntry();
-      const entryText = this.entryText();
-      const entryElement = this.entry().nativeElement;
-      const selectionRange = document.getSelection()?.getRangeAt(0);
-      entryElement.focus();
-
-      if (selectionRange && entryText) {
-        selectionRange.setStart(entryElement, 1);
-        selectionRange.setEnd(entryElement, 1);
-      }
+      this.focusEntry();
     }
   }
 
@@ -150,5 +144,18 @@ export class ShellComponent {
 
   syncEntry() {
     this.entry().nativeElement.innerText = this.entryText();
+  }
+
+  focusEntry() {
+    const entryElement = this.entry().nativeElement;
+    const entryText = this.entryText();
+    entryElement.focus();
+
+    const selectionRange = document.getSelection()?.getRangeAt(0);
+
+    if (selectionRange && entryText) {
+      selectionRange.setStart(entryElement, 1);
+      selectionRange.setEnd(entryElement, 1);
+    }
   }
 }
