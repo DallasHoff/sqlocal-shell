@@ -83,13 +83,23 @@ export class ShellDatabaseService {
   }
 
   async listDatabases(): Promise<string[]> {
+    const dbFileNames: string[] = [];
     const opfs = await navigator.storage.getDirectory();
-    const dbFileNames = [];
 
-    // TODO: handle subdirectories
-    for await (let [dbFileName] of opfs.entries()) {
-      dbFileNames.push(dbFileName);
-    }
+    const scanDir = async (
+      dirHandle: FileSystemDirectoryHandle,
+      path: string,
+    ) => {
+      for await (let [fileName, handle] of dirHandle.entries()) {
+        if (handle instanceof FileSystemDirectoryHandle) {
+          await scanDir(handle, `${path}${handle.name}/`);
+        } else {
+          dbFileNames.push(`${path}${fileName}`);
+        }
+      }
+    };
+
+    await scanDir(opfs, '');
 
     return dbFileNames;
   }
