@@ -1,0 +1,22 @@
+@if (data().length) {
+  <table class="sql-result">
+    <thead>
+      <tr>
+        @for (heading of headings(); track $index) {
+          <th>{{ heading }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track $index) {
+        <tr>
+          @for (cell of row; track $index) {
+            <td class="sql-result__value sql-result__value--{{ cell.type }}">
+              {{ cell.value }}
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+}

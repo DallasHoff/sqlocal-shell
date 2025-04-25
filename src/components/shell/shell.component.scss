@@ -1,0 +1,30 @@
+.shell {
+  min-width: 100vw;
+  min-width: 100dvw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 1rem;
+  font-family: "Courier New", Courier, monospace;
+  color: var(--fg-color);
+  background-color: var(--bg-color);
+  overflow: auto;
+  cursor: text;
+
+  &__input,
+  &__output {
+    position: relative;
+    display: block;
+    margin: 0.5rem 0;
+    font-family: inherit;
+    white-space: normal;
+  }
+
+  &__output {
+    color: var(--output-color);
+    white-space: pre-line;
+  }
+
+  &__entry {
+    outline: none;
+  }
+}

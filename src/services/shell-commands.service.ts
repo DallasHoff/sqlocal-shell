@@ -1,0 +1,164 @@
+import { computed, inject, Injectable, signal, Type } from '@angular/core';
+import { ShellDatabaseService } from './shell-database.service';
+import type { SQLocal } from 'sqlocal';
+import { ShellErrorComponent } from '../components/shell/shell-error/shell-error.component';
+import { SqlQueryComponent } from '../components/sql/sql-query/sql-query.component';
+import { ShellListComponent } from '../components/shell/shell-list/shell-list.component';
+import { ShellDatabaseInfoComponent } from '../components/shell/shell-database-info/shell-database-info.component';
+import { SqlResultComponent } from '../components/sql/sql-result/sql-result.component';
+
+type Entry = InputEntry | OutputEntry;
+type InputEntry = {
+  type: 'input';
+  prompt: string;
+  command: string;
+  message?: EntryMessageComponent;
+};
+type OutputEntry = {
+  type: 'output';
+  prompt: string;
+  message: string | EntryMessageComponent;
+};
+type EntryMessageComponent = {
+  component: Type<unknown>;
+  inputs: Record<string, unknown>;
+};
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ShellCommandsService {
+  private dbService = inject(ShellDatabaseService);
+
+  readonly commands: Record<
+    string,
+    {
+      desription: string;
+      fn: (db: SQLocal, arg: string) => Promise<OutputEntry['message']>;
+    }
+  > = {
+    clear: {
+      desription: '',
+      fn: async () => {
+        this.history.set([]);
+        this.historyPosition.set(null);
+        return '';
+      },
+    },
+    databases: {
+      desription: '',
+      fn: async () => {
+        const dbFileNames = await this.dbService.listDatabases();
+        return {
+          component: ShellListComponent,
+          inputs: { heading: 'All Database Files', items: dbFileNames },
+        };
+      },
+    },
+    tables: {
+      desription: '',
+      fn: async (db) => {
+        const result = await db.sql('SELECT name FROM sqlite_master');
+        let tableNames = result.map((table) => table['name']);
+        return {
+          component: ShellListComponent,
+          inputs: { heading: 'All Tables', items: tableNames },
+        };
+      },
+    },
+    open: {
+      desription: '',
+      fn: async (_, arg) => {
+        this.dbService.setDatabase(arg);
+        await navigator.storage.persist();
+        return `Connected to "${arg}"`;
+      },
+    },
+    info: {
+      desription: '',
+      fn: async (db) => {
+        const info = await db.getDatabaseInfo();
+        return {
+          component: ShellDatabaseInfoComponent,
+          inputs: { info },
+        };
+      },
+    },
+  };
+
+  running = signal<boolean>(false);
+  history = signal<Entry[]>([]);
+  historyPosition = signal<number | null>(null);
+
+  prompt = computed(() => {
+    return this.dbService.databaseName();
+  });
+
+  async exec(commandText: string) {
+    const command = commandText.trim();
+    const isSql = !command.startsWith('.');
+    const db = this.dbService.getDatabase();
+    const prompt = this.prompt();
+
+    let input: InputEntry = { type: 'input', prompt, command };
+    let output: OutputEntry;
+
+    try {
+      if (isSql) {
+        input.message = {
+          component: SqlQueryComponent,
+          inputs: { sql: command },
+        };
+      }
+    } finally {
+      this.history.update((history) => [...history, input]);
+    }
+
+    try {
+      if (command === '') {
+        output = { type: 'output', prompt, message: '' };
+        return;
+      }
+
+      this.running.set(true);
+
+      if (!isSql) {
+        const [_, action, arg] = Array.from(
+          command.match(/^\.(\w+)\s*(.*)$/) ?? [],
+        );
+        const commandConfig = this.commands[action];
+
+        if (!commandConfig) {
+          throw new Error(`Unknown command: "${action}"`);
+        } else {
+          const message = await commandConfig.fn(db, arg);
+          output = { type: 'output', prompt, message };
+        }
+      } else {
+        const result = await db.sql(command);
+        console.log(result);
+        output = {
+          type: 'output',
+          prompt,
+          message: {
+            component: SqlResultComponent,
+            inputs: { data: result },
+          },
+        };
+      }
+    } catch (err) {
+      output = {
+        type: 'output',
+        prompt: this.prompt(),
+        message: {
+          component: ShellErrorComponent,
+          inputs: { message: err instanceof Error ? err.message : null },
+        },
+      };
+    } finally {
+      this.history.update((history) => [...history, output]);
+      this.historyPosition.set(null);
+      this.running.set(false);
+    }
+  }
+}

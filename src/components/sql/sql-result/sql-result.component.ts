@@ -1,0 +1,25 @@
+import { Component, computed, input } from '@angular/core';
+
+@Component({
+  selector: 'sql-result',
+  imports: [],
+  templateUrl: './sql-result.component.html',
+  styleUrl: './sql-result.component.scss',
+})
+export class SqlResultComponent {
+  data = input.required<Record<string, unknown>[]>();
+
+  headings = computed(() => {
+    return Object.keys(this.data()[0] ?? {});
+  });
+
+  rows = computed(() => {
+    return this.data().map((row) => {
+      const values = Object.values(row);
+      return values.map((value) => {
+        const type = value === null ? 'null' : typeof value;
+        return { type, value };
+      });
+    });
+  });
+}

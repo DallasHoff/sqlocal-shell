@@ -1,0 +1,18 @@
+<dl class="shell-database-info">
+  <div>
+    <dt>Database Path:</dt>
+    <dd>{{ info().databasePath ?? "-" }}</dd>
+  </div>
+  <div>
+    <dt>Database Size:</dt>
+    <dd>{{ info().databaseSizeBytes ?? 0 | number }} Bytes</dd>
+  </div>
+  <div>
+    <dt>Storage Type:</dt>
+    <dd>{{ info().storageType ?? "-" }}</dd>
+  </div>
+  <div>
+    <dt>Persisted:</dt>
+    <dd>{{ info().persisted ?? false }}</dd>
+  </div>
+</dl>

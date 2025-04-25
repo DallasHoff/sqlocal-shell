@@ -1,0 +1,27 @@
+.sql-result {
+  &,
+  tr,
+  td,
+  th {
+    border: 1px solid currentColor;
+    border-collapse: collapse;
+    vertical-align: top;
+  }
+
+  td,
+  th {
+    padding: 0.25rem 0.5rem;
+  }
+
+  &__value {
+    &--null::before {
+      content: "NULL";
+      font-style: italic;
+    }
+
+    &--number,
+    &--bigint {
+      text-align: right;
+    }
+  }
+}

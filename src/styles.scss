@@ -1,1 +1,52 @@
 // Styles in this file will be applied to the app globally
+
+:root {
+  --bg-color: #33303b;
+  --fg-color: #f3f3f3;
+  --primary-color: #7f3eda;
+  --output-color: #ffee58;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--fg-color);
+  background-color: var(--bg-color);
+}
+
+// sql-highlight
+
+.sql-hl-keyword {
+  color: #ff9595;
+}
+
+.sql-hl-identifier {
+  color: #e88df7;
+}
+
+.sql-hl-number {
+  color: #e29b32;
+}
+
+.sql-hl-string {
+  color: #97c95d;
+}
+
+.sql-hl-bracket,
+.sql-hl-special {
+  color: #57aef3;
+}
+
+.sql-hl-function {
+  color: #3be4fa;
+}
+
+.sql-hl-comment {
+  color: #9b9b9b;
+}
