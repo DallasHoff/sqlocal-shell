@@ -50,3 +50,12 @@ html {
 .sql-hl-comment {
   color: #9b9b9b;
 }
+
+// noscript message
+
+.noscript-message {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+}
