@@ -33,12 +33,12 @@ export class ShellCommandsService {
   readonly commands: Record<
     string,
     {
-      desription: string;
+      description: string;
       fn: (db: SQLocal, arg: string) => Promise<OutputEntry['message']>;
     }
   > = {
     clear: {
-      desription: '',
+      description: '',
       fn: async () => {
         this.history.set([]);
         this.historyPosition.set(null);
@@ -46,7 +46,7 @@ export class ShellCommandsService {
       },
     },
     databases: {
-      desription: '',
+      description: '',
       fn: async () => {
         const dbFileNames = await this.dbService.listDatabases();
         return {
@@ -56,7 +56,7 @@ export class ShellCommandsService {
       },
     },
     tables: {
-      desription: '',
+      description: '',
       fn: async (db) => {
         const result = await db.sql('SELECT name FROM sqlite_master');
         let tableNames = result.map((table) => table['name']);
@@ -67,7 +67,7 @@ export class ShellCommandsService {
       },
     },
     open: {
-      desription: '',
+      description: '',
       fn: async (_, arg) => {
         this.dbService.setDatabase(arg);
         await navigator.storage.persist();
@@ -75,7 +75,7 @@ export class ShellCommandsService {
       },
     },
     info: {
-      desription: '',
+      description: '',
       fn: async (db) => {
         const info = await db.getDatabaseInfo();
         return {
@@ -84,8 +84,16 @@ export class ShellCommandsService {
         };
       },
     },
+    download: {
+      description: '',
+      fn: async (_, arg) => {
+        const databasePath = arg || this.dbService.databasePath();
+        await this.dbService.downloadDatabase(databasePath);
+        return `Downloaded "${databasePath}"`;
+      },
+    },
     delete: {
-      desription: '',
+      description: '',
       fn: async (_, arg) => {
         const databasePath = arg || this.dbService.databasePath();
         await this.dbService.deleteDatabase(databasePath);

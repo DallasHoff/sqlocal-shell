@@ -15,6 +15,10 @@ export class ShellDatabaseService {
   }
 
   private connectDatabase(databasePath: string): SQLocal {
+    if (databasePath === this.databasePath()) {
+      return this.database;
+    }
+
     return new SQLocal({
       databasePath,
       processor: new Worker(new URL('../sqlocal.worker', import.meta.url)),
@@ -45,9 +49,7 @@ export class ShellDatabaseService {
 
   async deleteDatabase(databasePath: string) {
     const isCurrent = databasePath === this.databasePath();
-    const database = isCurrent
-      ? this.database
-      : this.connectDatabase(databasePath);
+    const database = this.connectDatabase(databasePath);
     await database.deleteDatabaseFile();
 
     if (!isCurrent) {
@@ -65,6 +67,19 @@ export class ShellDatabaseService {
 
       await dirHandle.removeEntry(fileName);
     }
+  }
+
+  async downloadDatabase(databasePath: string) {
+    const database = this.connectDatabase(databasePath);
+    const file = await database.getDatabaseFile();
+    const fileName = databasePath.split(/[\\/]/).pop();
+    const fileUrl = URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = fileUrl;
+    a.download = fileName ?? 'database.sqlite3';
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(fileUrl);
   }
 
   async listDatabases(): Promise<string[]> {
