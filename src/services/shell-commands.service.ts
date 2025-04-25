@@ -84,6 +84,14 @@ export class ShellCommandsService {
         };
       },
     },
+    delete: {
+      desription: '',
+      fn: async (_, arg) => {
+        const databasePath = arg || this.dbService.databasePath();
+        await this.dbService.deleteDatabase(databasePath);
+        return `Deleted "${databasePath}"`;
+      },
+    },
   };
 
   running = signal<boolean>(false);
