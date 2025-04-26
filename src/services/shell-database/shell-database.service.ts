@@ -7,7 +7,6 @@ import { SQLocal } from 'sqlocal';
 export class ShellDatabaseService {
   private database: SQLocal;
 
-  databaseName = signal<string>('');
   databasePath = signal<string>('');
 
   constructor() {
@@ -35,13 +34,6 @@ export class ShellDatabaseService {
     }
 
     this.database = this.connectDatabase(databasePath);
-
-    const directories = databasePath
-      .split(/[\\/]/)
-      .filter((part) => part !== '');
-    const fileName = directories.pop();
-
-    this.databaseName.set(fileName ?? '');
     this.databasePath.set(databasePath ?? '');
 
     return this.database;

@@ -101,7 +101,7 @@ export class ShellCommandsService {
   historyPosition = signal<number | null>(null);
 
   prompt = computed(() => {
-    return this.dbService.databaseName();
+    return this.dbService.databasePath();
   });
 
   constructor() {
