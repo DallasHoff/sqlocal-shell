@@ -22,6 +22,10 @@
     white-space: normal;
   }
 
+  &__input {
+    position: relative;
+  }
+
   &__output {
     color: var(--output-color);
     white-space: pre-line;
@@ -35,6 +39,20 @@
     &:not(:focus) {
       animation: caret-blink 1s steps(1) infinite;
     }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__overlay-prompt {
+    visibility: hidden;
+  }
+
+  &__overlay-suggestion {
+    opacity: 0.5;
   }
 }
 

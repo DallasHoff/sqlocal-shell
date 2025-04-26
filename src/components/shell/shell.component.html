@@ -32,7 +32,9 @@
       }
     }
     <kbd class="shell__input">
-      <b>{{ commandService.prompt() }}>&nbsp;</b>
+      <b class="shell__input-prompt">
+        <span>{{ commandService.prompt() }}>&nbsp;</span>
+      </b>
       <span
         #entry
         class="shell__entry"
@@ -43,6 +45,18 @@
         autocapitalize="off"
         (input)="onInput($event)"
       ></span>
+      <span class="shell__overlay" aria-hidden="true">
+        <b class="shell__overlay-prompt">
+          <span>{{ commandService.prompt() }}>&nbsp;</span>
+        </b>
+        @if (typingSql()) {
+          <sql-query [sql]="entryText()"></sql-query>
+        } @else {
+          <span class="shell__overlay-suggestion">
+            <span>{{ entryText() }}{{ suggestionText() }}</span>
+          </span>
+        }
+      </span>
     </kbd>
   </div>
 </div>

@@ -12,10 +12,11 @@ import { NgComponentOutlet } from '@angular/common';
 import { ShellCommandsService } from '../../services/shell-commands/shell-commands.service';
 import { ShellDatabaseService } from '../../services/shell-database/shell-database.service';
 import { ShellHeaderComponent } from './shell-header/shell-header.component';
+import { SqlQueryComponent } from '../sql/sql-query/sql-query.component';
 
 @Component({
   selector: 'shell',
-  imports: [NgComponentOutlet, ShellHeaderComponent],
+  imports: [NgComponentOutlet, ShellHeaderComponent, SqlQueryComponent],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
 })
@@ -29,6 +30,12 @@ export class ShellComponent {
     this.entryText();
     if (this.isEntryFocused()) return;
     this.syncEntry();
+  });
+
+  suggestionText = signal<string>('');
+  typingSql = computed(() => {
+    const entryText = this.entryText();
+    return !entryText.startsWith('.');
   });
 
   pressed = signal({
