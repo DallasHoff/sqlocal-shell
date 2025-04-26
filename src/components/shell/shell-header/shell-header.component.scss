@@ -1,0 +1,17 @@
+.shell-header {
+  display: flex;
+  padding: 1rem;
+  background-color: var(--header-color);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 500ms;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+    }
+  }
+}

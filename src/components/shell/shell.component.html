@@ -1,45 +1,48 @@
 <div class="shell">
-  @for (item of history(); track $index) {
-    @if (item.type === "input") {
-      <kbd class="shell__input">
-        <b>{{ item.prompt }}> </b>
-        @if (!item.message) {
-          {{ item.command }}
-        } @else {
-          <ng-container
-            *ngComponentOutlet="
-              item.message.component;
-              inputs: item.message.inputs
-            "
-          ></ng-container>
-        }
-      </kbd>
-    } @else {
-      <output class="shell__output">
-        @if (typeof item.message === "string") {
-          {{ item.message }}
-        } @else {
-          <ng-container
-            *ngComponentOutlet="
-              item.message.component;
-              inputs: item.message.inputs
-            "
-          ></ng-container>
-        }
-      </output>
+  <shell-header></shell-header>
+  <div class="shell__content">
+    @for (item of history(); track $index) {
+      @if (item.type === "input") {
+        <kbd class="shell__input">
+          <b>{{ item.prompt }}> </b>
+          @if (!item.message) {
+            {{ item.command }}
+          } @else {
+            <ng-container
+              *ngComponentOutlet="
+                item.message.component;
+                inputs: item.message.inputs
+              "
+            ></ng-container>
+          }
+        </kbd>
+      } @else {
+        <output class="shell__output">
+          @if (typeof item.message === "string") {
+            {{ item.message }}
+          } @else {
+            <ng-container
+              *ngComponentOutlet="
+                item.message.component;
+                inputs: item.message.inputs
+              "
+            ></ng-container>
+          }
+        </output>
+      }
     }
-  }
-  <kbd class="shell__input">
-    <b>{{ commandService.prompt() }}>&nbsp;</b>
-    <span
-      #entry
-      class="shell__entry"
-      contenteditable="plaintext-only"
-      spellcheck="false"
-      autocomplete="off"
-      autocorrect="off"
-      autocapitalize="off"
-      (input)="onInput($event)"
-    ></span>
-  </kbd>
+    <kbd class="shell__input">
+      <b>{{ commandService.prompt() }}>&nbsp;</b>
+      <span
+        #entry
+        class="shell__entry"
+        contenteditable="plaintext-only"
+        spellcheck="false"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        (input)="onInput($event)"
+      ></span>
+    </kbd>
+  </div>
 </div>

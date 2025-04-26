@@ -3,12 +3,15 @@
   min-width: 100dvw;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 1rem;
-  font-family: "Courier New", Courier, monospace;
   color: var(--fg-color);
   background-color: var(--bg-color);
   overflow: auto;
-  cursor: text;
+
+  &__content {
+    font-family: "Courier New", Courier, monospace;
+    padding: 1rem;
+    cursor: text;
+  }
 
   &__input,
   &__output {

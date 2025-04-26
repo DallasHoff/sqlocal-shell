@@ -11,10 +11,11 @@ import {
 import { NgComponentOutlet } from '@angular/common';
 import { ShellCommandsService } from '../../services/shell-commands/shell-commands.service';
 import { ShellDatabaseService } from '../../services/shell-database/shell-database.service';
+import { ShellHeaderComponent } from './shell-header/shell-header.component';
 
 @Component({
   selector: 'shell',
-  imports: [NgComponentOutlet],
+  imports: [NgComponentOutlet, ShellHeaderComponent],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
 })

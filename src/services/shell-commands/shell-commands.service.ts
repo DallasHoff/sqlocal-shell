@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal, Type } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { ShellDatabaseService } from '../shell-database/shell-database.service';
 import type { SQLocal } from 'sqlocal';
 import { ShellErrorComponent } from '../../components/shell/shell-error/shell-error.component';
