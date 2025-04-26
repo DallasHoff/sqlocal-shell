@@ -112,7 +112,7 @@ export class ShellCommandsService {
       description: 'Download and open a demo database.',
       fn: async () => {
         const databasePath = 'demo/chinook.sqlite3';
-        const databaseRes = await fetch('/chinook.sqlite3');
+        const databaseRes = await fetch('/databases/chinook.sqlite3');
         const databaseFile = await databaseRes.blob();
         await this.dbService.overwriteDatabase(databasePath, databaseFile);
         this.dbService.setDatabase(databasePath);

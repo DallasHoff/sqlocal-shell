@@ -1,3 +1,13 @@
 <header class="shell-header">
-  <a [href]="docsUrl">SQLocal</a>
+  <a [href]="homeUrl" class="shell-header__title">SQLocal</a>
+  <div class="shell-header__spacer"></div>
+  @for (link of links; track $index) {
+    <a
+      [href]="link.href"
+      [attr.aria-label]="link.label"
+      class="shell-header__link"
+    >
+      <img src="/icons/{{ link.icon }}" alt="" width="20" height="20" />
+    </a>
+  }
 </header>

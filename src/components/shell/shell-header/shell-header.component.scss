@@ -1,9 +1,12 @@
 .shell-header {
   display: flex;
+  align-items: center;
+  gap: 1rem;
   padding: 1rem;
   background-color: var(--header-color);
 
-  a {
+  &__title,
+  &__link {
     color: inherit;
     text-decoration: none;
     opacity: 0.8;
@@ -13,5 +16,14 @@
     &:focus-visible {
       opacity: 1;
     }
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+  }
+
+  &__spacer {
+    flex-grow: 1;
   }
 }
