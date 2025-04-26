@@ -7,12 +7,14 @@ export type InputEntry = {
   prompt: string;
   command: string;
   message?: EntryMessageComponent;
+  hidden?: boolean;
 };
 
 export type OutputEntry = {
   type: 'output';
   prompt: string;
   message: string | EntryMessageComponent;
+  hidden?: boolean;
 };
 
 type EntryMessageComponent = {

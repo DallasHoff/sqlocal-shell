@@ -25,7 +25,9 @@ export class ShellCommandsService {
     clear: {
       description: '',
       fn: async () => {
-        this.history.set([]);
+        this.history.update((history) => {
+          return history.map((entry) => ({ ...entry, hidden: true }));
+        });
         this.historyPosition.set(null);
         return '';
       },
@@ -40,6 +42,14 @@ export class ShellCommandsService {
         };
       },
     },
+    open: {
+      description: '',
+      fn: async (_, arg) => {
+        this.dbService.setDatabase(arg);
+        await navigator.storage.persist();
+        return `Connected to "${arg}"`;
+      },
+    },
     tables: {
       description: '',
       fn: async (db) => {
@@ -49,14 +59,6 @@ export class ShellCommandsService {
           component: ShellListComponent,
           inputs: { heading: 'All Tables', items: tableNames },
         };
-      },
-    },
-    open: {
-      description: '',
-      fn: async (_, arg) => {
-        this.dbService.setDatabase(arg);
-        await navigator.storage.persist();
-        return `Connected to "${arg}"`;
       },
     },
     info: {

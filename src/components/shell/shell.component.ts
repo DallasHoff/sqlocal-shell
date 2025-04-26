@@ -44,7 +44,9 @@ export class ShellComponent {
 
   history = computed(() => {
     const history = this.commandService.history();
-    return history.filter((item) => item.type === 'input' || !!item.message);
+    return history.filter(
+      (item) => !item.hidden && (item.type === 'input' || !!item.message),
+    );
   });
 
   @HostListener('document:keydown', ['$event'])
