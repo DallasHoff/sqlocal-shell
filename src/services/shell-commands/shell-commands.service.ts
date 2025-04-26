@@ -54,7 +54,7 @@ export class ShellCommandsService {
         if (!arg) throw new Error('No database name specified.');
         this.dbService.setDatabase(arg);
         await navigator.storage.persist();
-        return `Connected to "${arg}"`;
+        return `Opened "${arg}"`;
       },
     },
     tables: {
@@ -106,6 +106,17 @@ export class ShellCommandsService {
         const databasePath = arg || this.dbService.databasePath();
         await this.dbService.deleteDatabase(databasePath);
         return `Deleted "${databasePath}"`;
+      },
+    },
+    demo: {
+      description: 'Download and open a demo database.',
+      fn: async () => {
+        const databasePath = 'demo/chinook.sqlite3';
+        const databaseRes = await fetch('/chinook.sqlite3');
+        const databaseFile = await databaseRes.blob();
+        await this.dbService.overwriteDatabase(databasePath, databaseFile);
+        this.dbService.setDatabase(databasePath);
+        return `Downloaded and opened "${databasePath}"`;
       },
     },
   };

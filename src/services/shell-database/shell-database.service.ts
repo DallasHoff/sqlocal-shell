@@ -76,6 +76,12 @@ export class ShellDatabaseService {
     this.getDatabaseList();
   }
 
+  async overwriteDatabase(databasePath: string, databaseFile: Blob) {
+    const database = this.connectDatabase(databasePath);
+    await database.overwriteDatabaseFile(databaseFile);
+    this.getDatabaseList();
+  }
+
   async uploadDatabase(databasePath: string) {
     const input = document.createElement('input');
     input.type = 'file';
@@ -88,9 +94,7 @@ export class ShellDatabaseService {
     const file = input.files?.item(0);
     if (!file) return false;
 
-    const database = this.connectDatabase(databasePath);
-    await database.overwriteDatabaseFile(file);
-    this.getDatabaseList();
+    await this.overwriteDatabase(databasePath, file);
     input.remove();
 
     return true;
