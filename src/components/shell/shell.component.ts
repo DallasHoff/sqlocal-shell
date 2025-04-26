@@ -13,6 +13,7 @@ import { ShellCommandsService } from '../../services/shell-commands/shell-comman
 import { ShellDatabaseService } from '../../services/shell-database/shell-database.service';
 import { ShellHeaderComponent } from './shell-header/shell-header.component';
 import { SqlQueryComponent } from '../sql/sql-query/sql-query.component';
+import { ShellSuggestionsService } from '../../services/shell-suggestions/shell-suggestions.service';
 
 @Component({
   selector: 'shell',
@@ -23,6 +24,7 @@ import { SqlQueryComponent } from '../sql/sql-query/sql-query.component';
 export class ShellComponent {
   dbService = inject(ShellDatabaseService);
   commandService = inject(ShellCommandsService);
+  suggestionsService = inject(ShellSuggestionsService);
 
   entry = viewChild.required<ElementRef<HTMLElement>>('entry');
   entryText = signal<string>('');
@@ -32,10 +34,14 @@ export class ShellComponent {
     this.syncEntry();
   });
 
-  suggestionText = signal<string>('');
   typingSql = computed(() => {
     const entryText = this.entryText();
     return !entryText.startsWith('.');
+  });
+  suggestionText = computed(() => {
+    const entryText = this.entryText();
+    const typingSql = this.typingSql();
+    return !typingSql ? this.suggestionsService.getSuggestion(entryText) : '';
   });
 
   pressed = signal({
@@ -83,10 +89,13 @@ export class ShellComponent {
     if (this.isActionKey(key)) {
       event.preventDefault();
 
+      const suggestionText = this.suggestionText();
       const history = this.commandService.history();
       const historyPosition = this.commandService.historyPosition();
 
-      if (key === 'Enter') {
+      if (key === 'Tab' && suggestionText) {
+        this.entryText.update((entryText) => entryText + suggestionText);
+      } else if (key === 'Enter') {
         const input = this.entryText();
         this.entryText.set('');
         this.syncEntry();
@@ -146,6 +155,7 @@ export class ShellComponent {
 
   isActionKey(key: string): boolean {
     return (
+      key === 'Tab' ||
       key === 'Enter' ||
       key === 'Escape' ||
       key === 'ArrowUp' ||

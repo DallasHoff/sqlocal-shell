@@ -8,6 +8,7 @@ export class ShellDatabaseService {
   private database: SQLocal;
 
   databasePath = signal<string>('');
+  databaseListCache = signal<string[]>([]);
 
   constructor() {
     const storageKey = 'last-database';
@@ -15,6 +16,7 @@ export class ShellDatabaseService {
     const openDatabase = localStorage.getItem(storageKey) || defaultDatabase;
 
     this.database = this.setDatabase(openDatabase);
+    this.getDatabaseList();
 
     effect(() => {
       const databasePath = this.databasePath();
@@ -39,12 +41,13 @@ export class ShellDatabaseService {
   }
 
   setDatabase(databasePath: string): SQLocal {
-    if (this.database) {
+    if (this.database && databasePath !== this.databasePath()) {
       this.database.destroy();
     }
 
     this.database = this.connectDatabase(databasePath);
     this.databasePath.set(databasePath ?? '');
+    this.getDatabaseList();
 
     return this.database;
   }
@@ -69,6 +72,8 @@ export class ShellDatabaseService {
 
       await dirHandle.removeEntry(fileName);
     }
+
+    this.getDatabaseList();
   }
 
   async uploadDatabase(databasePath: string) {
@@ -85,6 +90,7 @@ export class ShellDatabaseService {
 
     const database = this.connectDatabase(databasePath);
     await database.overwriteDatabaseFile(file);
+    this.getDatabaseList();
     input.remove();
 
     return true;
@@ -103,7 +109,7 @@ export class ShellDatabaseService {
     URL.revokeObjectURL(fileUrl);
   }
 
-  async listDatabases(): Promise<string[]> {
+  async getDatabaseList(): Promise<string[]> {
     const dbFileNames: string[] = [];
     const opfs = await navigator.storage.getDirectory();
 
@@ -121,6 +127,7 @@ export class ShellDatabaseService {
     };
 
     await scanDir(opfs, '');
+    this.databaseListCache.set(dbFileNames);
 
     return dbFileNames;
   }

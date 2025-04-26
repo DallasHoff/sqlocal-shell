@@ -19,11 +19,11 @@
     display: block;
     margin: 0.5rem 0;
     font-family: inherit;
-    white-space: normal;
   }
 
   &__input {
     position: relative;
+    white-space: pre-wrap;
   }
 
   &__output {
@@ -32,12 +32,17 @@
   }
 
   &__entry {
+    color: var(--fg-color);
+    caret-color: var(--fg-color);
     border-right: 1px solid transparent;
-    caret-color: currentColor;
     outline: none;
 
     &:not(:focus) {
       animation: caret-blink 1s steps(1) infinite;
+    }
+
+    &--sql {
+      color: transparent;
     }
   }
 
@@ -59,7 +64,7 @@
 @keyframes caret-blink {
   0%,
   100% {
-    border-right-color: currentColor;
+    border-right-color: var(--fg-color);
   }
   50% {
     border-right-color: transparent;

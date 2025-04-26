@@ -1,13 +1,17 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ShellDatabaseService } from '../shell-database/shell-database.service';
-import type { SQLocal } from 'sqlocal';
 import { ShellErrorComponent } from '../../components/shell/shell-error/shell-error.component';
 import { SqlQueryComponent } from '../../components/sql/sql-query/sql-query.component';
 import { ShellListComponent } from '../../components/shell/shell-list/shell-list.component';
 import { ShellDatabaseInfoComponent } from '../../components/shell/shell-database-info/shell-database-info.component';
 import { SqlResultComponent } from '../../components/sql/sql-result/sql-result.component';
 import { ShellIntroComponent } from '../../components/shell/shell-intro/shell-intro.component';
-import { Entry, InputEntry, OutputEntry } from './shell-commands.type';
+import {
+  CommandConfig,
+  Entry,
+  InputEntry,
+  OutputEntry,
+} from './shell-commands.type';
 import { ShellHelpComponent } from '../../components/shell/shell-help/shell-help.component';
 
 @Injectable({
@@ -16,13 +20,7 @@ import { ShellHelpComponent } from '../../components/shell/shell-help/shell-help
 export class ShellCommandsService {
   private dbService = inject(ShellDatabaseService);
 
-  readonly commands: Record<
-    string,
-    {
-      description: string;
-      fn: (db: SQLocal, arg: string) => Promise<OutputEntry['message']>;
-    }
-  > = {
+  readonly commands: Record<string, CommandConfig> = {
     help: {
       description: 'Print this help.',
       fn: async () => {
@@ -42,7 +40,7 @@ export class ShellCommandsService {
     databases: {
       description: 'List all saved databases.',
       fn: async () => {
-        const dbFileNames = await this.dbService.listDatabases();
+        const dbFileNames = await this.dbService.getDatabaseList();
         return {
           component: ShellListComponent,
           inputs: { heading: 'All Database Files', items: dbFileNames },
@@ -51,6 +49,7 @@ export class ShellCommandsService {
     },
     open: {
       description: 'Open a database.',
+      argType: 'database',
       fn: async (_, arg) => {
         if (!arg) throw new Error('No database name specified.');
         this.dbService.setDatabase(arg);
@@ -83,6 +82,7 @@ export class ShellCommandsService {
     },
     import: {
       description: 'Choose a database file to upload.',
+      argType: 'database',
       fn: async (_, arg) => {
         const databasePath = arg || this.dbService.databasePath();
         const uploaded = await this.dbService.uploadDatabase(databasePath);
@@ -92,6 +92,7 @@ export class ShellCommandsService {
     },
     export: {
       description: 'Download a copy of a database file.',
+      argType: 'database',
       fn: async (_, arg) => {
         const databasePath = arg || this.dbService.databasePath();
         await this.dbService.downloadDatabase(databasePath);
@@ -100,6 +101,7 @@ export class ShellCommandsService {
     },
     delete: {
       description: 'Delete a database.',
+      argType: 'database',
       fn: async (_, arg) => {
         const databasePath = arg || this.dbService.databasePath();
         await this.dbService.deleteDatabase(databasePath);
@@ -127,7 +129,7 @@ export class ShellCommandsService {
   }
 
   async exec(commandText: string) {
-    const command = commandText.trim();
+    const { command, action, arg } = this.parse(commandText);
     const isSql = !command.startsWith('.');
     const db = this.dbService.getDatabase();
     const prompt = this.prompt();
@@ -155,9 +157,6 @@ export class ShellCommandsService {
       this.running.set(true);
 
       if (!isSql) {
-        const [_, action, arg] = Array.from(
-          command.match(/^\.(\w+)\s*(.*)$/) ?? [],
-        );
         const commandConfig = this.commands[action];
 
         if (!commandConfig) {
@@ -192,5 +191,13 @@ export class ShellCommandsService {
       this.historyPosition.set(null);
       this.running.set(false);
     }
+  }
+
+  parse(commandText: string) {
+    const command = commandText.trim();
+    const [_, action = '', arg = ''] = Array.from(
+      command.match(/^\.(\w+)\s*(.*)$/) ?? [],
+    );
+    return { command, action, arg };
   }
 }

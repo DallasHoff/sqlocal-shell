@@ -6,7 +6,7 @@
         <kbd class="shell__input">
           <b>{{ item.prompt }}> </b>
           @if (!item.message) {
-            {{ item.command }}
+            <span>{{ item.command }}</span>
           } @else {
             <ng-container
               *ngComponentOutlet="
@@ -19,7 +19,7 @@
       } @else {
         <output class="shell__output">
           @if (typeof item.message === "string") {
-            {{ item.message }}
+            <span>{{ item.message }}</span>
           } @else {
             <ng-container
               *ngComponentOutlet="
@@ -38,6 +38,7 @@
       <span
         #entry
         class="shell__entry"
+        [class.shell__entry--sql]="typingSql()"
         contenteditable="plaintext-only"
         spellcheck="false"
         autocomplete="off"
