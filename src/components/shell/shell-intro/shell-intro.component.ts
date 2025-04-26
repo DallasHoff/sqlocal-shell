@@ -11,6 +11,7 @@ import packageLockJson from '../../../../package-lock.json';
 export class ShellIntroComponent {
   commandService = inject(ShellCommandsService);
 
+  databaseName = this.commandService.prompt();
   packages = packageLockJson.packages;
   sqlocalVersion = this.packages['node_modules/sqlocal'].version;
   sqliteVersion =
