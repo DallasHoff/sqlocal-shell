@@ -69,6 +69,15 @@ export class ShellCommandsService {
         };
       },
     },
+    import: {
+      description: '',
+      fn: async (_, arg) => {
+        const databasePath = arg || this.dbService.databasePath();
+        const uploaded = await this.dbService.uploadDatabase(databasePath);
+        if (!uploaded) return '';
+        return `Imported "${databasePath}"`;
+      },
+    },
     export: {
       description: '',
       fn: async (_, arg) => {

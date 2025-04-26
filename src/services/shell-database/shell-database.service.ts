@@ -69,6 +69,25 @@ export class ShellDatabaseService {
     }
   }
 
+  async uploadDatabase(databasePath: string) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.click();
+
+    await new Promise((resolve) => {
+      input.addEventListener('change', resolve, { once: true });
+    });
+
+    const file = input.files?.item(0);
+    if (!file) return false;
+
+    const database = this.connectDatabase(databasePath);
+    await database.overwriteDatabaseFile(file);
+    input.remove();
+
+    return true;
+  }
+
   async downloadDatabase(databasePath: string) {
     const database = this.connectDatabase(databasePath);
     const file = await database.getDatabaseFile();
