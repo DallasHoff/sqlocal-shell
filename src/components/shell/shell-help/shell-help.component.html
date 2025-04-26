@@ -1,0 +1,24 @@
+<div class="shell-help">
+  <b aria-hidden="true">Commands</b>
+  <dl class="shell-help__list" aria-label="Commands">
+    @for (command of commands(); track command.name) {
+      <dt>.{{ command.name }}</dt>
+      <dd>{{ command.description }}</dd>
+    }
+  </dl>
+  <br />
+  <b aria-hidden="true">Keyboard</b>
+  <dl class="shell-help__list" aria-label="Keyboard">
+    <dt>Enter</dt>
+    <dd>Execute the current input.</dd>
+    <dt>Escape</dt>
+    <dd>Clear the current input.</dd>
+    <dt>Arrow Up/Down</dt>
+    <dd>Navigate command history.</dd>
+  </dl>
+  <br />
+  <p class="shell-help__info">
+    Input entered besides the commands listed above will be executed as SQL
+    against the open database.
+  </p>
+</div>

@@ -8,6 +8,7 @@ import { ShellDatabaseInfoComponent } from '../../components/shell/shell-databas
 import { SqlResultComponent } from '../../components/sql/sql-result/sql-result.component';
 import { ShellIntroComponent } from '../../components/shell/shell-intro/shell-intro.component';
 import { Entry, InputEntry, OutputEntry } from './shell-commands.type';
+import { ShellHelpComponent } from '../../components/shell/shell-help/shell-help.component';
 
 @Injectable({
   providedIn: 'root',
@@ -22,8 +23,14 @@ export class ShellCommandsService {
       fn: (db: SQLocal, arg: string) => Promise<OutputEntry['message']>;
     }
   > = {
+    help: {
+      description: 'Print this help.',
+      fn: async () => {
+        return { component: ShellHelpComponent, inputs: {} };
+      },
+    },
     clear: {
-      description: '',
+      description: 'Clear the shell.',
       fn: async () => {
         this.history.update((history) => {
           return history.map((entry) => ({ ...entry, hidden: true }));
@@ -33,7 +40,7 @@ export class ShellCommandsService {
       },
     },
     databases: {
-      description: '',
+      description: 'List all saved databases.',
       fn: async () => {
         const dbFileNames = await this.dbService.listDatabases();
         return {
@@ -43,15 +50,16 @@ export class ShellCommandsService {
       },
     },
     open: {
-      description: '',
+      description: 'Open a database.',
       fn: async (_, arg) => {
+        if (!arg) throw new Error('No database name specified.');
         this.dbService.setDatabase(arg);
         await navigator.storage.persist();
         return `Connected to "${arg}"`;
       },
     },
     tables: {
-      description: '',
+      description: 'List all tables in the open database.',
       fn: async (db) => {
         const result = await db.sql('SELECT name FROM sqlite_master');
         let tableNames = result.map((table) => table['name']);
@@ -62,7 +70,7 @@ export class ShellCommandsService {
       },
     },
     info: {
-      description: '',
+      description: 'Print information about the open database.',
       fn: async (db) => {
         const info = await db.getDatabaseInfo();
         return {
@@ -72,7 +80,7 @@ export class ShellCommandsService {
       },
     },
     import: {
-      description: '',
+      description: 'Choose a database file to upload.',
       fn: async (_, arg) => {
         const databasePath = arg || this.dbService.databasePath();
         const uploaded = await this.dbService.uploadDatabase(databasePath);
@@ -81,7 +89,7 @@ export class ShellCommandsService {
       },
     },
     export: {
-      description: '',
+      description: 'Download a copy of a database file.',
       fn: async (_, arg) => {
         const databasePath = arg || this.dbService.databasePath();
         await this.dbService.downloadDatabase(databasePath);
@@ -89,7 +97,7 @@ export class ShellCommandsService {
       },
     },
     delete: {
-      description: '',
+      description: 'Delete a database.',
       fn: async (_, arg) => {
         const databasePath = arg || this.dbService.databasePath();
         await this.dbService.deleteDatabase(databasePath);

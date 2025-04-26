@@ -1,0 +1,12 @@
+.shell-help {
+  &__list {
+    display: grid;
+    grid-template-columns: 140px auto;
+    gap: 0 1.5rem;
+    padding-left: 1rem;
+  }
+
+  &__info {
+    max-width: 600px;
+  }
+}
