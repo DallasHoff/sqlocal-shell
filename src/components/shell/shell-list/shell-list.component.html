@@ -2,7 +2,7 @@
   <b aria-hidden="true">{{ heading() }}</b>
 }
 <ul [attr.aria-label]="heading() || null" class="shell-list">
-  @for (item of items(); track $index) {
+  @for (item of list(); track $index) {
     <li>{{ item }}</li>
   } @empty {
     (None)
