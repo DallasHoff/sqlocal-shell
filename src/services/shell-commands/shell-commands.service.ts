@@ -61,7 +61,9 @@ export class ShellCommandsService {
     tables: {
       description: 'List all tables in the open database.',
       fn: async (db) => {
-        const result = await db.sql('SELECT name FROM sqlite_master');
+        const result = await db.sql(
+          "SELECT name FROM sqlite_master WHERE type = 'table'",
+        );
         let tableNames = result.map((table) => table['name']);
         return {
           component: ShellListComponent,
