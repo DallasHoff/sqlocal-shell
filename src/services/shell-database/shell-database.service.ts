@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import { SQLocal } from 'sqlocal';
 
 @Injectable({
@@ -10,7 +10,17 @@ export class ShellDatabaseService {
   databasePath = signal<string>('');
 
   constructor() {
-    this.database = this.setDatabase('database.sqlite3');
+    const storageKey = 'last-database';
+    const defaultDatabase = 'database.sqlite3';
+    const openDatabase = localStorage.getItem(storageKey) || defaultDatabase;
+
+    this.database = this.setDatabase(openDatabase);
+
+    effect(() => {
+      const databasePath = this.databasePath();
+      if (!databasePath) return;
+      localStorage.setItem(storageKey, databasePath);
+    });
   }
 
   private connectDatabase(databasePath: string): SQLocal {
