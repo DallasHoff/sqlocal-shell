@@ -69,12 +69,12 @@ export class ShellCommandsService {
         };
       },
     },
-    download: {
+    export: {
       description: '',
       fn: async (_, arg) => {
         const databasePath = arg || this.dbService.databasePath();
         await this.dbService.downloadDatabase(databasePath);
-        return `Downloaded "${databasePath}"`;
+        return `Exported "${databasePath}"`;
       },
     },
     delete: {

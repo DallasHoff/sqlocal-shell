@@ -1,16 +1,20 @@
 .sql-result {
-  &,
-  tr,
-  td,
-  th {
-    border: 1px solid currentColor;
-    border-collapse: collapse;
-    vertical-align: top;
-  }
+  overflow: auto;
 
-  td,
-  th {
-    padding: 0.25rem 0.5rem;
+  &__table {
+    &,
+    tr,
+    td,
+    th {
+      border: 1px solid currentColor;
+      border-collapse: collapse;
+      vertical-align: top;
+    }
+
+    td,
+    th {
+      padding: 0.25rem 0.5rem;
+    }
   }
 
   &__value {

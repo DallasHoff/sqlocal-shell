@@ -1,4 +1,11 @@
-import { Component, computed, input } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  ElementRef,
+  input,
+  viewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'sql-result',
@@ -6,8 +13,16 @@ import { Component, computed, input } from '@angular/core';
   templateUrl: './sql-result.component.html',
   styleUrl: './sql-result.component.scss',
 })
-export class SqlResultComponent {
+export class SqlResultComponent implements AfterViewInit {
   data = input.required<Record<string, unknown>[]>();
+  scrollTo = input<boolean>(true);
+  result = viewChild<ElementRef<HTMLElement>>('result');
+
+  ngAfterViewInit() {
+    if (this.scrollTo()) {
+      this.result()?.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 
   headings = computed(() => {
     return Object.keys(this.data()[0] ?? {});

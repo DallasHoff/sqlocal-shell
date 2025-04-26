@@ -80,6 +80,7 @@ export class ShellComponent {
       if (key === 'Enter') {
         const input = this.entryText();
         this.entryText.set('');
+        this.syncEntry();
         await this.commandService.exec(input);
       } else if (key === 'Escape') {
         this.entryText.set('');
@@ -158,5 +159,7 @@ export class ShellComponent {
       selectionRange.setStart(entryElement, 1);
       selectionRange.setEnd(entryElement, 1);
     }
+
+    entryElement.scrollIntoView();
   }
 }
