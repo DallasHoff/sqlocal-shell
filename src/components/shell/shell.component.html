@@ -32,7 +32,7 @@
       }
     }
     <kbd class="shell__input">
-      <b class="shell__input-prompt">
+      <b class="shell__input-prompt" (click)="focusEntry()">
         <span>{{ commandService.prompt() }}>&nbsp;</span>
       </b>
       <span
