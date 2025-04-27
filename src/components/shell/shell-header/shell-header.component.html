@@ -1,5 +1,8 @@
 <header class="shell-header">
-  <a [href]="homeUrl" class="shell-header__title">SQLocal</a>
+  <a [href]="homeUrl" class="shell-header__logo">
+    <img src="/icons/sqlocal.png" alt="" width="24" height="24" />
+    SQLocal
+  </a>
   <div class="shell-header__spacer"></div>
   @for (link of links; track $index) {
     <a

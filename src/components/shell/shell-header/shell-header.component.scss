@@ -5,8 +5,11 @@
   padding: 1rem;
   background-color: var(--header-color);
 
-  &__title,
+  &__logo,
   &__link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     color: inherit;
     text-decoration: none;
     opacity: 0.8;
@@ -16,11 +19,6 @@
     &:focus-visible {
       opacity: 1;
     }
-  }
-
-  &__link {
-    display: flex;
-    align-items: center;
   }
 
   &__spacer {
