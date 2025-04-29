@@ -4,6 +4,11 @@
   column-gap: 2rem;
   word-break: break-word;
 
+  &__placeholder {
+    list-style-type: none;
+    margin-left: -1rem;
+  }
+
   @media (min-width: 480px) {
     column-count: 2;
   }

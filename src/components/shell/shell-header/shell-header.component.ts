@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './shell-header.component.scss',
 })
 export class ShellHeaderComponent {
-  homeUrl = 'https://sqlocal.dallashoffman.com/';
+  homeUrl = 'https://sqlocal.dev';
 
   links: { label: string; icon: string; href: string }[] = [
     {
