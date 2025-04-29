@@ -6,8 +6,8 @@ import { ShellDatabaseService } from '../shell-database/shell-database.service';
   providedIn: 'root',
 })
 export class ShellSuggestionsService {
-  dbService = inject(ShellDatabaseService);
-  commandService = inject(ShellCommandsService);
+  private dbService = inject(ShellDatabaseService);
+  private commandService = inject(ShellCommandsService);
 
   getSuggestion(entryText: string) {
     if (entryText.endsWith(' ')) {
