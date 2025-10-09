@@ -19,7 +19,7 @@
     "@angular/router": "^19.2.0",
     "rxjs": "~7.8.0",
     "sql-highlight": "^6.0.0",
-    "sqlocal": "^0.14.1",
+    "sqlocal": "^0.15.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

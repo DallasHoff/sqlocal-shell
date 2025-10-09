@@ -90,6 +90,10 @@
             "assets": [
               {
                 "glob": "**/*",
+                "input": "node_modules/@sqlite.org/sqlite-wasm/sqlite-wasm/jswasm"
+              },
+              {
+                "glob": "**/*",
                 "input": "public"
               }
             ],
