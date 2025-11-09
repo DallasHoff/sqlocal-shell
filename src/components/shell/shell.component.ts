@@ -129,7 +129,7 @@ export class ShellComponent {
     }
   }
 
-  @HostListener('document:paste', ['$event'])
+  @HostListener('document:paste')
   async onPaste() {
     if (this.isEntryFocused()) return;
     const pastedText = await navigator.clipboard.readText();
