@@ -26,7 +26,7 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "node_modules/@sqlite.org/sqlite-wasm/sqlite-wasm/jswasm"
+                "input": "node_modules/@sqlite.org/sqlite-wasm/dist"
               },
               {
                 "glob": "**/*",
@@ -90,7 +90,7 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "node_modules/@sqlite.org/sqlite-wasm/sqlite-wasm/jswasm",
+                "input": "node_modules/@sqlite.org/sqlite-wasm/dist",
                 "output": "base"
               },
               {
