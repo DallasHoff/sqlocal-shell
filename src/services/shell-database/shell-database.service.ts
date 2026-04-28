@@ -55,24 +55,7 @@ export class ShellDatabaseService {
   async deleteDatabase(databasePath: string) {
     const isCurrent = databasePath === this.databasePath();
     const database = this.connectDatabase(databasePath);
-    await database.deleteDatabaseFile();
-
-    if (!isCurrent) {
-      await database.destroy();
-
-      const directories = databasePath
-        .split(/[\\/]/)
-        .filter((part) => part !== '');
-      const fileName = directories.pop();
-      if (!fileName) return;
-
-      let dirHandle = await navigator.storage.getDirectory();
-      for (let dirName of directories)
-        dirHandle = await dirHandle.getDirectoryHandle(dirName);
-
-      await dirHandle.removeEntry(fileName);
-    }
-
+    await database.deleteDatabaseFile(undefined, !isCurrent);
     this.getDatabaseList();
   }
 
